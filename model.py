@@ -24,10 +24,10 @@ class MultiModalClassifier(nn.Module):
     def forward(self, image, text_tokens):
         # CNNで画像処理
         x_image = torch.relu(self.conv1(image))
-        #print(f"After conv1: {x_image.shape}")  # conv1の出力形状を確認
+        print(f"After conv1: {x_image.shape}")  # conv1の出力形状を確認
         x_image = self.pool(x_image)
         x_image = torch.relu(self.conv2(x_image))
-        #print(f"After conv2: {x_image.shape}")  # conv2の出力形状を確認
+        print(f"After conv2: {x_image.shape}")  # conv2の出力形状を確認
         x_image = self.pool(x_image)
         
         # BERTでテキスト処理 (事前学習済みの特徴を抽出)
@@ -35,15 +35,15 @@ class MultiModalClassifier(nn.Module):
             bert_output = self.bert(**text_tokens).pooler_output  # [CLS]トークンの出力
         
         # 画像とテキストの特徴を結合する前に形状を確認
-        #print(f"x_image shape: {x_image.shape}")
-        #print(f"bert_output shape: {bert_output.shape}")
+        print(f"x_image shape: {x_image.shape}")
+        print(f"bert_output shape: {bert_output.shape}")
         
         # 画像とテキストの特徴を結合
         x_image = x_image.view(x_image.size(0), -1)  # viewでバッチサイズに合わせる
-        #print(f"x_image shape: {x_image.shape}")
+        print(f"x_image shape: {x_image.shape}")
         x = torch.cat((x_image, bert_output), dim=1)
 
-        #print(f"x shape: {x.shape}")
+        print(f"x shape: {x.shape}")
         
         # 結合後に全結合層を通す
         x = torch.relu(self.fc1(x))

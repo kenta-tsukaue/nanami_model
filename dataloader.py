@@ -48,7 +48,7 @@ class FontDataset(Dataset):
             image = self.transform(image)
         
         # タイトルのトークン化（BERT用）
-        text = self.data.iloc[idx]['title']
+        text = self.data.iloc[idx]['image_title']
         text_tokens = self.tokenizer(text, return_tensors='pt', padding=True, truncation=True)
         
         # BERTのトークンをフラットに変換
